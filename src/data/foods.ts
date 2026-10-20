@@ -1,0 +1,52 @@
+import type { Food, Micro } from '../types';
+
+const m = (name: string, amount: number, unit: string, pct: number): Micro => ({ name, amount, unit, pct });
+
+// Valores aproximados por 100 g (tablas de composición habituales)
+export const SEED_FOODS: Food[] = [
+  { id: 'pollo-cocida', name: 'Pechuga de pollo cocida', category: 'Pollo & Aves', emoji: '🍗', kcal: 165, protein: 31, fat: 3.6, carbs: 0, fiber: 0,
+    micros: [m('Vitamina B6', 0.6, 'mg', 35), m('Niacina', 13.7, 'mg', 85), m('Fósforo', 228, 'mg', 33), m('Selenio', 27, 'mcg', 49)] },
+  { id: 'salmon', name: 'Salmón a la plancha', category: 'Pescado', emoji: '🐟', kcal: 208, protein: 20, fat: 13.4, carbs: 0, fiber: 0,
+    micros: [m('Vitamina B12', 2.8, 'mcg', 117), m('Vitamina D', 9.1, 'mcg', 45), m('Vitamina B6', 0.6, 'mg', 35), m('Selenio', 32, 'mcg', 58), m('Fósforo', 252, 'mg', 36), m('Potasio', 363, 'mg', 8)] },
+  { id: 'atun-lata', name: 'Atún al natural (lata)', category: 'Pescado', emoji: '🐟', kcal: 116, protein: 26, fat: 1, carbs: 0, fiber: 0, micros: [m('Selenio', 80, 'mcg', 145), m('Vitamina B12', 2.2, 'mcg', 92)] },
+  { id: 'ternera', name: 'Ternera magra a la plancha', category: 'Carnes', emoji: '🥩', kcal: 190, protein: 27, fat: 8.5, carbs: 0, fiber: 0, micros: [m('Hierro', 2.6, 'mg', 14), m('Zinc', 5.5, 'mg', 50), m('Vitamina B12', 2.6, 'mcg', 108)] },
+  { id: 'huevo', name: 'Huevo entero', category: 'Huevos y lácteos', emoji: '🥚', kcal: 143, protein: 12.6, fat: 9.5, carbs: 0.7, fiber: 0, micros: [m('Vitamina B12', 1.1, 'mcg', 46), m('Vitamina D', 2, 'mcg', 10), m('Selenio', 31, 'mcg', 56)] },
+  { id: 'arroz-basmati', name: 'Arroz basmati cocido', category: 'Cereales', emoji: '🍚', kcal: 130, protein: 2.7, fat: 0.3, carbs: 28, fiber: 0.4 },
+  { id: 'pasta', name: 'Pasta cocida', category: 'Cereales', emoji: '🍝', kcal: 158, protein: 5.8, fat: 0.9, carbs: 31, fiber: 1.8 },
+  { id: 'avena', name: 'Copos de avena', category: 'Cereales', emoji: '🥣', kcal: 379, protein: 13.2, fat: 6.5, carbs: 67.7, fiber: 10.1, micros: [m('Magnesio', 138, 'mg', 33), m('Hierro', 4.3, 'mg', 24)] },
+  { id: 'pan-integral', name: 'Pan integral', category: 'Cereales', emoji: '🍞', kcal: 247, protein: 13, fat: 3.4, carbs: 41, fiber: 7 },
+  { id: 'patata', name: 'Patata cocida', category: 'Verduras', emoji: '🥔', kcal: 87, protein: 1.9, fat: 0.1, carbs: 20.1, fiber: 1.8, micros: [m('Potasio', 379, 'mg', 8), m('Vitamina C', 13, 'mg', 14)] },
+  { id: 'boniato', name: 'Boniato cocido', category: 'Verduras', emoji: '🍠', kcal: 90, protein: 2, fat: 0.2, carbs: 20.7, fiber: 3.3, micros: [m('Vitamina A', 960, 'mcg', 107)] },
+  { id: 'brocoli', name: 'Brócoli cocido', category: 'Verduras', emoji: '🥦', kcal: 35, protein: 2.4, fat: 0.4, carbs: 7.2, fiber: 3.3, micros: [m('Vitamina C', 65, 'mg', 72), m('Vitamina K', 141, 'mcg', 117)] },
+  { id: 'espinacas', name: 'Espinacas', category: 'Verduras', emoji: '🥬', kcal: 23, protein: 2.9, fat: 0.4, carbs: 3.6, fiber: 2.2, micros: [m('Hierro', 2.7, 'mg', 15), m('Vitamina A', 469, 'mcg', 52)] },
+  { id: 'tomate', name: 'Tomate', category: 'Verduras', emoji: '🍅', kcal: 18, protein: 0.9, fat: 0.2, carbs: 3.9, fiber: 1.2, micros: [m('Vitamina C', 14, 'mg', 16)] },
+  { id: 'lechuga', name: 'Lechuga', category: 'Verduras', emoji: '🥗', kcal: 15, protein: 1.4, fat: 0.2, carbs: 2.9, fiber: 1.3 },
+  { id: 'zanahoria', name: 'Zanahoria', category: 'Verduras', emoji: '🥕', kcal: 41, protein: 0.9, fat: 0.2, carbs: 9.6, fiber: 2.8, micros: [m('Vitamina A', 835, 'mcg', 93)] },
+  { id: 'aguacate', name: 'Aguacate Hass', category: 'Frutas', emoji: '🥑', kcal: 160, protein: 2, fat: 14.7, carbs: 8.5, fiber: 6.7, micros: [m('Vitamina K', 21, 'mcg', 18), m('Potasio', 485, 'mg', 10)] },
+  { id: 'manzana', name: 'Manzana con piel', category: 'Frutas', emoji: '🍎', kcal: 52, protein: 0.3, fat: 0.2, carbs: 13.8, fiber: 2.4, micros: [m('Vitamina C', 4.6, 'mg', 5)] },
+  { id: 'platano', name: 'Plátano', category: 'Frutas', emoji: '🍌', kcal: 89, protein: 1.1, fat: 0.3, carbs: 22.8, fiber: 2.6, micros: [m('Potasio', 358, 'mg', 8), m('Vitamina B6', 0.4, 'mg', 23)] },
+  { id: 'naranja', name: 'Naranja', category: 'Frutas', emoji: '🍊', kcal: 47, protein: 0.9, fat: 0.1, carbs: 11.8, fiber: 2.4, micros: [m('Vitamina C', 53, 'mg', 59)] },
+  { id: 'fresas', name: 'Fresas', category: 'Frutas', emoji: '🍓', kcal: 32, protein: 0.7, fat: 0.3, carbs: 7.7, fiber: 2, micros: [m('Vitamina C', 59, 'mg', 65)] },
+  { id: 'frutos-rojos', name: 'Frutos rojos', category: 'Frutas', emoji: '🫐', kcal: 50, protein: 0.8, fat: 0.4, carbs: 12, fiber: 3.5 },
+  { id: 'yogur-griego', name: 'Yogur griego 0% desnatado', category: 'Huevos y lácteos', emoji: '🥛', kcal: 59, protein: 10.3, fat: 0.4, carbs: 3.6, fiber: 0, micros: [m('Calcio', 110, 'mg', 11)] },
+  { id: 'leche', name: 'Leche semidesnatada', category: 'Huevos y lácteos', emoji: '🥛', kcal: 47, protein: 3.4, fat: 1.6, carbs: 4.8, fiber: 0, micros: [m('Calcio', 120, 'mg', 12)] },
+  { id: 'queso-fresco', name: 'Queso fresco batido 0%', category: 'Huevos y lácteos', emoji: '🧀', kcal: 46, protein: 8, fat: 0.2, carbs: 3.5, fiber: 0 },
+  { id: 'queso-curado', name: 'Queso curado', category: 'Huevos y lácteos', emoji: '🧀', kcal: 402, protein: 25, fat: 33, carbs: 1.3, fiber: 0, micros: [m('Calcio', 721, 'mg', 72)] },
+  { id: 'almendras', name: 'Almendras', category: 'Frutos secos', emoji: '🌰', kcal: 579, protein: 21.2, fat: 49.9, carbs: 21.6, fiber: 12.5, micros: [m('Vitamina E', 25.6, 'mg', 170), m('Magnesio', 270, 'mg', 64)] },
+  { id: 'nueces', name: 'Nueces', category: 'Frutos secos', emoji: '🌰', kcal: 654, protein: 15.2, fat: 65.2, carbs: 13.7, fiber: 6.7 },
+  { id: 'crema-cacahuete', name: 'Crema de cacahuete', category: 'Frutos secos', emoji: '🥜', kcal: 588, protein: 25, fat: 50, carbs: 20, fiber: 6 },
+  { id: 'aceite-oliva', name: 'Aceite de oliva', category: 'Grasas', emoji: '🫒', kcal: 884, protein: 0, fat: 100, carbs: 0, fiber: 0, micros: [m('Vitamina E', 14.4, 'mg', 96)] },
+  { id: 'lentejas', name: 'Lentejas cocidas', category: 'Legumbres', emoji: '🫘', kcal: 116, protein: 9, fat: 0.4, carbs: 20.1, fiber: 7.9, micros: [m('Hierro', 3.3, 'mg', 18), m('Folato', 181, 'mcg', 45)] },
+  { id: 'garbanzos', name: 'Garbanzos cocidos', category: 'Legumbres', emoji: '🫘', kcal: 164, protein: 8.9, fat: 2.6, carbs: 27.4, fiber: 7.6 },
+  { id: 'tofu', name: 'Tofu firme', category: 'Legumbres', emoji: '🧈', kcal: 144, protein: 15.8, fat: 8.7, carbs: 2.8, fiber: 2.3, micros: [m('Calcio', 350, 'mg', 35)] },
+  { id: 'whey', name: 'Proteína whey (polvo)', category: 'Suplementos', emoji: '🥤', kcal: 400, protein: 80, fat: 6, carbs: 8, fiber: 0 },
+  { id: 'jamon-serrano', name: 'Jamón serrano', category: 'Carnes', emoji: '🥓', kcal: 241, protein: 31, fat: 13, carbs: 0.1, fiber: 0 },
+  { id: 'pavo-fiambre', name: 'Pechuga de pavo (fiambre)', category: 'Pollo & Aves', emoji: '🍗', kcal: 104, protein: 17, fat: 2, carbs: 4, fiber: 0 },
+  { id: 'gambas', name: 'Gambas cocidas', category: 'Pescado', emoji: '🦐', kcal: 99, protein: 24, fat: 0.3, carbs: 0.2, fiber: 0 },
+  { id: 'merluza', name: 'Merluza al horno', category: 'Pescado', emoji: '🐟', kcal: 90, protein: 18.3, fat: 1.7, carbs: 0, fiber: 0 },
+  { id: 'chocolate-negro', name: 'Chocolate negro 85%', category: 'Dulces', emoji: '🍫', kcal: 598, protein: 7.8, fat: 43, carbs: 46, fiber: 11 },
+  { id: 'cafe-leche', name: 'Café con leche', category: 'Bebidas', emoji: '☕', kcal: 28, protein: 1.8, fat: 1, carbs: 2.9, fiber: 0 },
+  { id: 'cerveza', name: 'Cerveza', category: 'Bebidas', emoji: '🍺', kcal: 43, protein: 0.5, fat: 0, carbs: 3.6, fiber: 0 },
+];
+
+export const CATEGORIES = ['Todos', ...Array.from(new Set(SEED_FOODS.map((f) => f.category))), 'Mis alimentos'];

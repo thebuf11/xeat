@@ -1,0 +1,40 @@
+/** @type {import('tailwindcss').Config} */
+export default {
+  content: ['./index.html', './src/**/*.{ts,tsx}'],
+  darkMode: 'class',
+  theme: {
+    extend: {
+      colors: {
+        background: '#0e0e10',
+        surface: '#0e0e10',
+        'surface-container-lowest': '#131314',
+        'surface-container-low': '#1c1b1c',
+        'surface-container': '#201f20',
+        'surface-container-high': '#2a2a2b',
+        'surface-container-highest': '#353436',
+        'on-surface': '#e5e2e3',
+        'on-surface-variant': '#a1a1aa',
+        outline: '#a78b7d',
+        'outline-variant': '#584237',
+        primary: '#ffb690',
+        'on-primary': '#552100',
+        'primary-container': '#f97316',
+        'on-primary-container': '#582200',
+        secondary: '#4edea3',
+        'secondary-container': '#00a572',
+        error: '#ffb4ab',
+        'error-container': '#93000a',
+        protein: '#60a5fa',
+        carbs: '#f97316',
+        fat: '#4edea3',
+        fiber: '#a78bfa',
+      },
+      borderRadius: { DEFAULT: '0.5rem', lg: '0.75rem', xl: '1rem', '2xl': '1.25rem' },
+      fontFamily: {
+        display: ['"Plus Jakarta Sans"', 'sans-serif'],
+        sans: ['Geist', 'system-ui', 'sans-serif'],
+      },
+    },
+  },
+  plugins: [],
+};

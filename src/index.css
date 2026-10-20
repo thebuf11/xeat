@@ -1,0 +1,27 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html, body { background: #0e0e10; color: #f4f4f5; font-family: Geist, system-ui, sans-serif; -webkit-tap-highlight-color: transparent; }
+  body { font-variant-numeric: tabular-nums; }
+  ::-webkit-scrollbar { display: none; }
+  input[type='number']::-webkit-inner-spin-button { display: none; }
+  input[type='number'] { -moz-appearance: textfield; }
+}
+
+@layer components {
+  .card { @apply rounded-2xl border border-white/[0.08] bg-[#141416] shadow-[0_12px_32px_-8px_rgba(0,0,0,0.65)]; }
+  .inner { @apply rounded-xl border border-white/[0.06] bg-[#1b1b1f]; }
+  .btn-primary { @apply flex items-center justify-center gap-2 rounded-xl bg-primary-container font-semibold text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.15)] transition hover:bg-orange-600 active:scale-[0.98] disabled:opacity-40; }
+  .btn-ghost { @apply flex items-center justify-center gap-2 rounded-xl border border-white/10 bg-[#1b1b1f] font-medium text-zinc-100 transition hover:bg-[#24242a] active:scale-[0.98]; }
+  .chip { @apply whitespace-nowrap rounded-full border border-white/10 bg-[#1b1b1f] px-4 py-2 text-sm font-medium text-zinc-400 transition; }
+  .chip-active { @apply border-transparent bg-primary-container text-white shadow-[0_0_18px_rgba(249,115,22,0.35)]; }
+  .input { @apply w-full rounded-xl border border-white/10 bg-[#141416] px-4 py-3 text-zinc-100 outline-none placeholder:text-zinc-500 focus:border-primary-container/60; }
+  .label { @apply text-[11px] font-semibold uppercase tracking-wider text-zinc-500; }
+}
+
+.material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; font-size: 24px; line-height: 1; }
+.material-symbols-outlined.fill { font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+.pb-safe { padding-bottom: env(safe-area-inset-bottom, 0px); }
+.pt-safe { padding-top: env(safe-area-inset-top, 0px); }
