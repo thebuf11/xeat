@@ -48,7 +48,7 @@ export default function Explore() {
         <ul className="space-y-3">
           {list.map((f) => (
             <li key={f.id}>
-              <Link to={`/alimento/${f.id}`} className="card flex items-center gap-3 p-3 transition hover:bg-[#1b1b1f]">
+              <Link to={`/alimento/${f.id}`} className="card flex items-center gap-3 p-3 transition hover:bg-inner">
                 <FoodThumb emoji={f.emoji} />
                 <div className="min-w-0 flex-1">
                   <p className="flex items-center gap-1.5 truncate font-semibold">

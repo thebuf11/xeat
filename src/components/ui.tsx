@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import { NavLink, useNavigate } from 'react-router-dom';
+import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { useStore } from '../store';
 import { clamp } from '../lib/nutrition';
 
@@ -9,7 +9,7 @@ export const Icon = ({ name, className = '', fill = false }: { name: string; cla
 
 export function Bar({ value, color = 'bg-primary-container', className = '' }: { value: number; color?: string; className?: string }) {
   return (
-    <div className={`h-2 w-full overflow-hidden rounded-full bg-white/10 ${className}`}>
+    <div className={`h-2 w-full overflow-hidden rounded-full bg-ink/10 ${className}`}>
       <div className={`h-full rounded-full transition-all duration-500 ${color}`} style={{ width: `${clamp(value)}%` }} />
     </div>
   );
@@ -25,7 +25,7 @@ export function Ring({ rings, size = 150, children }: { rings: { value: number; 
           const c = 2 * Math.PI * rad;
           return (
             <g key={i}>
-              <circle cx={size / 2} cy={size / 2} r={rad} fill="none" stroke="rgba(255,255,255,0.07)" strokeWidth={stroke} />
+              <circle cx={size / 2} cy={size / 2} r={rad} fill="none" stroke="rgb(var(--ink) / 0.07)" strokeWidth={stroke} />
               <circle cx={size / 2} cy={size / 2} r={rad} fill="none" stroke={r.color} strokeWidth={stroke} strokeLinecap="round"
                 strokeDasharray={c} strokeDashoffset={c * (1 - clamp(r.value, 0, 100) / 100)} style={{ transition: 'stroke-dashoffset .6s' }} />
             </g>
@@ -37,14 +37,12 @@ export function Ring({ rings, size = 150, children }: { rings: { value: number; 
   );
 }
 
-export function Avatar() {
-  const { state } = useStore();
+export function SettingsButton() {
   const nav = useNavigate();
-  const initial = (state.settings.name || 'X').trim().charAt(0).toUpperCase();
   return (
     <button onClick={() => nav('/ajustes')} aria-label="Ajustes"
-      className="flex h-11 w-11 items-center justify-center rounded-full border-2 border-primary-container/60 bg-surface-container-high font-display font-bold text-primary-container">
-      {initial}
+      className="flex h-11 w-11 items-center justify-center rounded-full border border-ink/10 bg-surface-container-high text-zinc-300 transition hover:text-primary-container active:scale-95">
+      <Icon name="settings" />
     </button>
   );
 }
@@ -52,11 +50,12 @@ export function Avatar() {
 export function Header({ subtitle, back }: { subtitle?: string; back?: string | boolean }) {
   const { state } = useStore();
   const nav = useNavigate();
+  const { pathname } = useLocation();
   return (
-    <header className="pt-safe sticky top-0 z-30 flex items-center justify-between border-b border-white/5 bg-background/85 px-4 py-3 backdrop-blur-xl">
+    <header className="pt-safe sticky top-0 z-30 flex items-center justify-between border-b border-ink/5 bg-background/85 px-4 py-3 backdrop-blur-xl">
       <div className="flex items-center gap-3">
         {back ? (
-          <button onClick={() => (typeof back === 'string' ? nav(back) : nav(-1))} aria-label="Volver" className="flex h-10 w-10 items-center justify-center rounded-full hover:bg-white/5">
+          <button onClick={() => (typeof back === 'string' ? nav(back) : nav(-1))} aria-label="Volver" className="flex h-10 w-10 items-center justify-center rounded-full hover:bg-ink/5">
             <Icon name="arrow_back" />
           </button>
         ) : (
@@ -69,7 +68,7 @@ export function Header({ subtitle, back }: { subtitle?: string; back?: string | 
           {!back && subtitle && <p className="text-sm text-zinc-400">{subtitle}</p>}
         </div>
       </div>
-      <Avatar />
+      {pathname !== '/ajustes' && <SettingsButton />}
     </header>
   );
 }
@@ -83,14 +82,14 @@ const TABS = [
 
 export function BottomNav() {
   return (
-    <nav className="pb-safe fixed inset-x-0 bottom-0 z-40 mx-auto max-w-md border-t border-white/5 bg-background/90 backdrop-blur-xl">
+    <nav className="pb-safe fixed inset-x-0 bottom-0 z-40 mx-auto max-w-md border-t border-ink/5 bg-background/90 backdrop-blur-xl">
       <ul className="grid grid-cols-4 items-end px-2 pb-2 pt-1">
         {TABS.map((t) => (
           <li key={t.to} className="flex justify-center">
             <NavLink to={t.to} end className={({ isActive }) => `flex flex-col items-center gap-1 px-3 py-2 text-xs font-medium ${t.fab ? '' : isActive ? 'text-primary-container' : 'text-zinc-500'}`}>
               {({ isActive }) => t.fab ? (
                 <>
-                  <span className={`-mt-8 flex h-14 w-14 items-center justify-center rounded-full bg-primary-container text-white shadow-[0_0_24px_rgba(249,115,22,0.5)] ${isActive ? 'ring-2 ring-white/30' : ''}`}>
+                  <span className={`-mt-8 flex h-14 w-14 items-center justify-center rounded-full bg-primary-container text-white shadow-[0_0_24px_rgba(249,115,22,0.5)] ${isActive ? 'ring-2 ring-ink/20' : ''}`}>
                     <Icon name="add" className="!text-[30px]" />
                   </span>
                   <span className="text-zinc-400">{t.label}</span>
@@ -113,7 +112,7 @@ export function Toast() {
   const { toastMsg } = useStore();
   if (!toastMsg) return null;
   return (
-    <div role="status" className="fixed inset-x-0 bottom-28 z-50 mx-auto w-fit max-w-[90%] rounded-full border border-white/10 bg-surface-container-highest px-5 py-3 text-sm font-medium shadow-xl">
+    <div role="status" className="fixed inset-x-0 bottom-28 z-50 mx-auto w-fit max-w-[90%] rounded-full border border-ink/10 bg-surface-container-highest px-5 py-3 text-sm font-medium shadow-xl">
       {toastMsg}
     </div>
   );

@@ -12,7 +12,9 @@ import { StoreProvider } from './store';
 
 function Shell() {
   const { pathname } = useLocation();
-  useEffect(() => window.scrollTo(0, 0), [pathname]);
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
   // Pantallas a pantalla completa (con su propia barra inferior de acción)
   const focused = /^\/(anadir|alimento|crear|ajustes)/.test(pathname);
   return (

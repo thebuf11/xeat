@@ -91,7 +91,7 @@ export default function AddFood() {
                 <p className="font-display text-4xl font-bold text-primary-container">{m.kcal}<span className="ml-1 text-base font-medium text-zinc-400">kcal</span></p>
                 <span className="label">Aporte nutricional</span>
               </div>
-              <div className="mt-3 flex h-2 overflow-hidden rounded-full bg-white/10">
+              <div className="mt-3 flex h-2 overflow-hidden rounded-full bg-ink/10">
                 <div className="bg-protein" style={{ width: `${(split.p / splitTotal) * 100}%` }} />
                 <div className="bg-carbs" style={{ width: `${(split.c / splitTotal) * 100}%` }} />
                 <div className="bg-fat" style={{ width: `${(split.f / splitTotal) * 100}%` }} />
@@ -119,7 +119,7 @@ export default function AddFood() {
             {results.map((f) => (
               <li key={f.id}>
                 <button onClick={() => { setSelected(f); setGrams(100); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
-                  className={`card flex w-full items-center gap-3 p-3 text-left transition hover:bg-[#1b1b1f] ${selected?.id === f.id ? '!border-primary-container/60' : ''}`}>
+                  className={`card flex w-full items-center gap-3 p-3 text-left transition hover:bg-inner ${selected?.id === f.id ? '!border-primary-container/60' : ''}`}>
                   <FoodThumb emoji={f.emoji} />
                   <div className="min-w-0 flex-1">
                     <p className="truncate font-semibold">{f.name}</p>
@@ -147,7 +147,7 @@ export default function AddFood() {
         </section>
       </main>
 
-      <div className="pb-safe fixed inset-x-0 bottom-0 z-40 mx-auto max-w-md border-t border-white/5 bg-background/95 px-4 pb-3 pt-3 backdrop-blur-xl">
+      <div className="pb-safe fixed inset-x-0 bottom-0 z-40 mx-auto max-w-md border-t border-ink/5 bg-background/95 px-4 pb-3 pt-3 backdrop-blur-xl">
         <button onClick={add} disabled={!selected || grams <= 0} className="btn-primary w-full py-4 text-base">
           <Icon name="check_circle" />
           {selected && m ? `Añadir al ${mealLabel} (${grams}g · ${m.kcal} kcal)` : 'Selecciona un alimento'}

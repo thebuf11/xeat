@@ -48,7 +48,7 @@ export default function Today() {
               const sel = k === date;
               return (
                 <button key={k} onClick={() => select(k)} aria-pressed={sel}
-                  className={`flex flex-col items-center gap-1 rounded-2xl py-2 text-sm transition ${sel ? 'bg-primary-container text-white shadow-[0_0_18px_rgba(249,115,22,0.4)]' : 'text-zinc-400 hover:bg-white/5'}`}>
+                  className={`flex flex-col items-center gap-1 rounded-2xl py-2 text-sm transition ${sel ? 'bg-primary-container text-white shadow-[0_0_18px_rgba(249,115,22,0.4)]' : 'text-zinc-400 hover:bg-ink/5'}`}>
                   <span className="text-[11px] font-medium">{dayLetter(k)}</span>
                   <span className="font-display text-lg font-bold">{dayNum(k)}</span>
                   <span className={`h-1.5 w-1.5 rounded-full ${withData.has(k) ? (sel ? 'bg-white' : 'bg-primary-container') : 'bg-transparent'}`} />
@@ -73,9 +73,9 @@ export default function Today() {
           </div>
           <div className="flex items-center gap-4">
             <Ring size={150} rings={[
-              { value: done, color: '#f97316' },
-              { value: pct(total.protein, goals.protein), color: '#60a5fa' },
-              { value: pct(total.fat, goals.fat), color: '#4edea3' },
+              { value: done, color: 'rgb(var(--primary-container))' },
+              { value: pct(total.protein, goals.protein), color: 'rgb(var(--protein))' },
+              { value: pct(total.fat, goals.fat), color: 'rgb(var(--fat))' },
             ]}>
               <span className="text-[10px] font-semibold uppercase tracking-wider text-zinc-500">{remaining >= 0 ? 'Restan' : 'Exceso'}</span>
               <span className="font-display text-3xl font-bold leading-none">{num(Math.abs(remaining))}</span>
@@ -125,7 +125,7 @@ export default function Today() {
                 <div key={meal.id} className="card p-4">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
-                      <div className={`flex h-11 w-11 items-center justify-center rounded-xl ${items.length ? 'bg-primary-container/15 text-primary-container' : 'bg-white/5 text-zinc-500'}`}>
+                      <div className={`flex h-11 w-11 items-center justify-center rounded-xl ${items.length ? 'bg-primary-container/15 text-primary-container' : 'bg-ink/5 text-zinc-500'}`}>
                         <Icon name={meal.icon} />
                       </div>
                       <div>

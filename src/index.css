@@ -3,7 +3,71 @@
 @tailwind utilities;
 
 @layer base {
-  html, body { background: #0e0e10; color: #f4f4f5; font-family: Geist, system-ui, sans-serif; -webkit-tap-highlight-color: transparent; }
+  /* Tema oscuro (por defecto). Canales RGB para que funcionen los modificadores de opacidad de Tailwind. */
+  :root {
+    color-scheme: dark;
+    --background: 14 14 16;
+    --surface-container-lowest: 19 19 20;
+    --surface-container-low: 28 27 28;
+    --surface-container: 32 31 32;
+    --surface-container-high: 42 42 43;
+    --surface-container-highest: 53 52 54;
+    --on-surface: 229 226 227;
+    --card: 20 20 22;
+    --inner: 27 27 31;
+    --inner-hover: 36 36 42;
+    --ink: 255 255 255;
+    --fg: 244 244 245;
+    --zinc-100: 244 244 245;
+    --zinc-200: 228 228 231;
+    --zinc-300: 212 212 216;
+    --zinc-400: 161 161 170;
+    --zinc-500: 113 113 122;
+    --zinc-600: 82 82 91;
+    --primary: 255 182 144;
+    --primary-container: 249 115 22;
+    --secondary: 78 222 163;
+    --error: 255 180 171;
+    --protein: 96 165 250;
+    --carbs: 249 115 22;
+    --fat: 78 222 163;
+    --fiber: 167 139 250;
+    --shadow-card: 0 12px 32px -8px rgba(0, 0, 0, 0.65);
+  }
+
+  /* Tema claro: la escala zinc se invierte para que los textos secundarios sigan siendo legibles */
+  :root.light {
+    color-scheme: light;
+    --background: 246 246 248;
+    --surface-container-lowest: 255 255 255;
+    --surface-container-low: 244 244 246;
+    --surface-container: 238 238 241;
+    --surface-container-high: 236 236 240;
+    --surface-container-highest: 255 255 255;
+    --on-surface: 24 24 27;
+    --card: 255 255 255;
+    --inner: 243 243 246;
+    --inner-hover: 234 234 238;
+    --ink: 0 0 0;
+    --fg: 24 24 27;
+    --zinc-100: 24 24 27;
+    --zinc-200: 39 39 42;
+    --zinc-300: 63 63 70;
+    --zinc-400: 82 82 91;
+    --zinc-500: 113 113 122;
+    --zinc-600: 161 161 170;
+    --primary: 194 65 12;
+    --primary-container: 234 88 12;
+    --secondary: 5 150 105;
+    --error: 220 38 38;
+    --protein: 37 99 235;
+    --carbs: 234 88 12;
+    --fat: 5 150 105;
+    --fiber: 124 58 237;
+    --shadow-card: 0 8px 24px -12px rgba(24, 24, 27, 0.18);
+  }
+
+  html, body { background: rgb(var(--background)); color: rgb(var(--fg)); font-family: Geist, system-ui, sans-serif; -webkit-tap-highlight-color: transparent; }
   body { font-variant-numeric: tabular-nums; }
   ::-webkit-scrollbar { display: none; }
   input[type='number']::-webkit-inner-spin-button { display: none; }
@@ -11,13 +75,13 @@
 }
 
 @layer components {
-  .card { @apply rounded-2xl border border-white/[0.08] bg-[#141416] shadow-[0_12px_32px_-8px_rgba(0,0,0,0.65)]; }
-  .inner { @apply rounded-xl border border-white/[0.06] bg-[#1b1b1f]; }
-  .btn-primary { @apply flex items-center justify-center gap-2 rounded-xl bg-primary-container font-semibold text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.15)] transition hover:bg-orange-600 active:scale-[0.98] disabled:opacity-40; }
-  .btn-ghost { @apply flex items-center justify-center gap-2 rounded-xl border border-white/10 bg-[#1b1b1f] font-medium text-zinc-100 transition hover:bg-[#24242a] active:scale-[0.98]; }
-  .chip { @apply whitespace-nowrap rounded-full border border-white/10 bg-[#1b1b1f] px-4 py-2 text-sm font-medium text-zinc-400 transition; }
+  .card { @apply rounded-2xl border border-ink/[0.08] bg-card shadow-[var(--shadow-card)]; }
+  .inner { @apply rounded-xl border border-ink/[0.06] bg-inner; }
+  .btn-primary { @apply flex items-center justify-center gap-2 rounded-xl bg-primary-container font-semibold text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.15)] transition hover:brightness-90 active:scale-[0.98] disabled:opacity-40; }
+  .btn-ghost { @apply flex items-center justify-center gap-2 rounded-xl border border-ink/10 bg-inner font-medium text-zinc-100 transition hover:bg-inner-hover active:scale-[0.98]; }
+  .chip { @apply whitespace-nowrap rounded-full border border-ink/10 bg-inner px-4 py-2 text-sm font-medium text-zinc-400 transition; }
   .chip-active { @apply border-transparent bg-primary-container text-white shadow-[0_0_18px_rgba(249,115,22,0.35)]; }
-  .input { @apply w-full rounded-xl border border-white/10 bg-[#141416] px-4 py-3 text-zinc-100 outline-none placeholder:text-zinc-500 focus:border-primary-container/60; }
+  .input { @apply w-full rounded-xl border border-ink/10 bg-card px-4 py-3 text-zinc-100 outline-none placeholder:text-zinc-500 focus:border-primary-container/60; }
   .label { @apply text-[11px] font-semibold uppercase tracking-wider text-zinc-500; }
 }
 

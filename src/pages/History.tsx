@@ -92,7 +92,7 @@ export default function History() {
                 <p className="text-xs text-zinc-500">Promedio: {num(avg)} kcal / día</p>
               </div>
             </div>
-            <span className="whitespace-nowrap rounded-xl border border-white/10 bg-white/5 px-2.5 py-1 text-xs">Meta: {num(goals.kcal)} kcal</span>
+            <span className="whitespace-nowrap rounded-xl border border-ink/10 bg-ink/5 px-2.5 py-1 text-xs">Meta: {num(goals.kcal)} kcal</span>
           </div>
           <div className="inner px-3 pb-2 pt-6">
             <div className="relative flex h-24 items-end gap-1">
@@ -105,7 +105,7 @@ export default function History() {
                     {range === 'semana' && s.t.kcal > 0 && (
                       <span className="absolute text-[10px] text-zinc-500" style={{ bottom: `calc(${h}% + 2px)` }}>{(s.t.kcal / 1000).toFixed(2).replace('.', ',')}k</span>
                     )}
-                    <div className={`w-full max-w-[28px] rounded-t-md ${s.t.kcal ? (hit ? 'bg-primary-container' : 'bg-zinc-600') : 'bg-white/10'}`} style={{ height: `${h}%` }} />
+                    <div className={`w-full max-w-[28px] rounded-t-md ${s.t.kcal ? (hit ? 'bg-primary-container' : 'bg-zinc-600') : 'bg-ink/10'}`} style={{ height: `${h}%` }} />
                   </div>
                 );
               })}
@@ -157,7 +157,7 @@ export default function History() {
                   <Pill dot="bg-carbs" text={`${Math.round(t.carbs)}g Carbos`} />
                 </div>
                 {expanded && (
-                  <div className="space-y-2 border-t border-white/5 p-3">
+                  <div className="space-y-2 border-t border-ink/5 p-3">
                     {MEALS.map((meal) => {
                       const mi = items.filter((e) => e.meal === meal.id);
                       if (!mi.length) return null;
@@ -206,5 +206,5 @@ export default function History() {
 }
 
 const Pill = ({ dot, text }: { dot: string; text: string }) => (
-  <span className="flex items-center gap-1.5 rounded-lg border border-white/5 bg-white/5 px-2.5 py-1.5"><i className={`h-1.5 w-1.5 rounded-full ${dot}`} />{text}</span>
+  <span className="flex items-center gap-1.5 rounded-lg border border-ink/5 bg-ink/5 px-2.5 py-1.5"><i className={`h-1.5 w-1.5 rounded-full ${dot}`} />{text}</span>
 );

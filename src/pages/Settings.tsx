@@ -2,6 +2,12 @@ import { useState } from 'react';
 import { Header, Icon } from '../components/ui';
 import { exportCsv } from '../lib/csv';
 import { useStore } from '../store';
+import type { Theme } from '../types';
+
+const THEMES: { id: Theme; label: string; icon: string }[] = [
+  { id: 'light', label: 'Claro', icon: 'light_mode' },
+  { id: 'dark', label: 'Oscuro', icon: 'dark_mode' },
+];
 
 export default function Settings() {
   const { state, saveSettings, reset, toast } = useStore();
@@ -19,7 +25,7 @@ export default function Settings() {
 
   const save = () => {
     if (!valid) return;
-    saveSettings({ name: f.name.trim(), ...nums });
+    saveSettings({ ...state.settings, name: f.name.trim(), ...nums });
     toast('Objetivos guardados');
   };
 
@@ -62,6 +68,24 @@ export default function Settings() {
             Tus macros suman {Math.round(macroKcal)} kcal frente a {nums.kcal || 0} kcal de meta.
           </p>
           <button onClick={save} disabled={!valid} className="btn-primary w-full py-3.5"><Icon name="check" /> Guardar objetivos</button>
+        </section>
+
+        <section className="card space-y-4 p-4">
+          <h2 className="font-display text-lg font-semibold">Personalizar</h2>
+          <div>
+            <span className="label">Apariencia</span>
+            <div role="radiogroup" aria-label="Apariencia" className="mt-1.5 grid grid-cols-2 gap-1 rounded-2xl border border-ink/[0.08] bg-inner p-1">
+              {THEMES.map((t) => {
+                const active = state.settings.theme === t.id;
+                return (
+                  <button key={t.id} role="radio" aria-checked={active} onClick={() => saveSettings({ ...state.settings, theme: t.id })}
+                    className={`flex items-center justify-center gap-2 rounded-xl py-2.5 text-sm font-semibold transition ${active ? 'bg-primary-container text-white' : 'text-zinc-400'}`}>
+                    <Icon name={t.icon} className="!text-[20px]" fill={active} /> {t.label}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
         </section>
 
         <section className="card space-y-3 p-4">

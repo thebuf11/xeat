@@ -1,3 +1,5 @@
+const v = (name) => `rgb(var(--${name}) / <alpha-value>)`;
+
 /** @type {import('tailwindcss').Config} */
 export default {
   content: ['./index.html', './src/**/*.{ts,tsx}'],
@@ -5,29 +7,36 @@ export default {
   theme: {
     extend: {
       colors: {
-        background: '#0e0e10',
-        surface: '#0e0e10',
-        'surface-container-lowest': '#131314',
-        'surface-container-low': '#1c1b1c',
-        'surface-container': '#201f20',
-        'surface-container-high': '#2a2a2b',
-        'surface-container-highest': '#353436',
-        'on-surface': '#e5e2e3',
+        // Los colores que cambian entre modo claro y oscuro leen variables definidas en index.css
+        background: v('background'),
+        surface: v('background'),
+        'surface-container-lowest': v('surface-container-lowest'),
+        'surface-container-low': v('surface-container-low'),
+        'surface-container': v('surface-container'),
+        'surface-container-high': v('surface-container-high'),
+        'surface-container-highest': v('surface-container-highest'),
+        'on-surface': v('on-surface'),
+        card: v('card'),
+        inner: v('inner'),
+        'inner-hover': v('inner-hover'),
+        // Superposiciones (bordes, hovers): blanco en oscuro, negro en claro
+        ink: v('ink'),
+        zinc: { 100: v('zinc-100'), 200: v('zinc-200'), 300: v('zinc-300'), 400: v('zinc-400'), 500: v('zinc-500'), 600: v('zinc-600') },
         'on-surface-variant': '#a1a1aa',
         outline: '#a78b7d',
         'outline-variant': '#584237',
-        primary: '#ffb690',
+        primary: v('primary'),
         'on-primary': '#552100',
-        'primary-container': '#f97316',
+        'primary-container': v('primary-container'),
         'on-primary-container': '#582200',
-        secondary: '#4edea3',
+        secondary: v('secondary'),
         'secondary-container': '#00a572',
-        error: '#ffb4ab',
+        error: v('error'),
         'error-container': '#93000a',
-        protein: '#60a5fa',
-        carbs: '#f97316',
-        fat: '#4edea3',
-        fiber: '#a78bfa',
+        protein: v('protein'),
+        carbs: v('carbs'),
+        fat: v('fat'),
+        fiber: v('fiber'),
       },
       borderRadius: { DEFAULT: '0.5rem', lg: '0.75rem', xl: '1rem', '2xl': '1.25rem' },
       fontFamily: {

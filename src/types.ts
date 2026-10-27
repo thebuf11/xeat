@@ -35,7 +35,10 @@ export interface Settings {
   protein: number;
   carbs: number;
   fat: number;
+  theme: Theme;
 }
+
+export type Theme = 'dark' | 'light';
 
 export interface AppState {
   customFoods: Food[];

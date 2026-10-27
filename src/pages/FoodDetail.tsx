@@ -75,7 +75,7 @@ export default function FoodDetail() {
               <span className="rounded-full bg-primary-container/15 px-2.5 py-1 text-xs font-semibold text-primary-container">{pct(m.kcal, goals.kcal)}% cubierto</span>
             </div>
           </div>
-          <div className="mt-4 flex h-2 overflow-hidden rounded-full bg-white/10">
+          <div className="mt-4 flex h-2 overflow-hidden rounded-full bg-ink/10">
             <div className="bg-protein" style={{ width: `${split.protein}%` }} />
             <div className="bg-carbs" style={{ width: `${split.fat}%` }} />
             <div className="bg-fat" style={{ width: `${split.carbs}%` }} />
@@ -104,7 +104,7 @@ export default function FoodDetail() {
                   <p className="text-xs text-zinc-500">% del Valor Diario Recomendado</p>
                 </div>
               </div>
-              <span className="rounded-full bg-white/5 px-2.5 py-1 text-xs">{grams} g</span>
+              <span className="rounded-full bg-ink/5 px-2.5 py-1 text-xs">{grams} g</span>
             </div>
             <ul className="space-y-4">
               {[...food.micros].sort((a, b) => b.pct - a.pct).map((x) => {
@@ -128,7 +128,7 @@ export default function FoodDetail() {
           <div className="grid grid-cols-4 gap-2">
             {MEALS.map((x) => (
               <button key={x.id} onClick={() => setMeal(x.id)} aria-pressed={meal === x.id}
-                className={`flex flex-col items-center gap-1 rounded-xl py-3 text-xs font-semibold transition ${meal === x.id ? 'bg-primary-container text-white shadow-[0_0_18px_rgba(249,115,22,0.4)]' : 'bg-white/5 text-zinc-400'}`}>
+                className={`flex flex-col items-center gap-1 rounded-xl py-3 text-xs font-semibold transition ${meal === x.id ? 'bg-primary-container text-white shadow-[0_0_18px_rgba(249,115,22,0.4)]' : 'bg-ink/5 text-zinc-400'}`}>
                 <Icon name={x.icon} />{x.label}
               </button>
             ))}

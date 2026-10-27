@@ -9,7 +9,7 @@ const DEFAULTS: AppState = {
   customFoods: [],
   entries: [],
   favorites: [],
-  settings: { name: '', kcal: 2000, protein: 140, carbs: 210, fat: 65 },
+  settings: { name: '', kcal: 2000, protein: 140, carbs: 210, fat: 65, theme: 'dark' },
 };
 
 function load(): AppState {
@@ -69,6 +69,13 @@ export function StoreProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     try { localStorage.setItem(KEY, JSON.stringify(state)); } catch { /* almacenamiento lleno o bloqueado */ }
   }, [state]);
+
+  useEffect(() => {
+    const { theme } = state.settings;
+    document.documentElement.classList.toggle('light', theme === 'light');
+    document.documentElement.classList.toggle('dark', theme === 'dark');
+    document.querySelector('meta[name="theme-color"]')?.setAttribute('content', theme === 'light' ? '#f6f6f8' : '#0e0e10');
+  }, [state.settings.theme]);
 
   useEffect(() => {
     if (!toastMsg) return;

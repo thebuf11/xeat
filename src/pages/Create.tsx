@@ -74,7 +74,7 @@ export default function Create() {
     <>
       <Header back subtitle="Crear" />
       <main className="space-y-5 px-4 pb-32 pt-4">
-        <div className="grid grid-cols-2 gap-1 rounded-2xl border border-white/[0.08] bg-[#141416] p-1">
+        <div className="grid grid-cols-2 gap-1 rounded-2xl border border-ink/[0.08] bg-card p-1">
           {(['plato', 'alimento'] as const).map((m) => (
             <button key={m} onClick={() => setMode(m)} className={`rounded-xl py-2.5 text-sm font-semibold capitalize transition ${mode === m ? 'bg-primary-container text-white' : 'text-zinc-400'}`}>{m === 'plato' ? 'Plato (ingredientes)' : 'Alimento (por 100 g)'}</button>
           ))}
@@ -89,7 +89,7 @@ export default function Create() {
             <span className="label">Icono</span>
             <div className="mt-1.5 flex flex-wrap gap-2">
               {EMOJIS.map((e) => (
-                <button key={e} onClick={() => setEmoji(e)} aria-pressed={emoji === e} className={`h-11 w-11 rounded-xl text-xl ${emoji === e ? 'bg-primary-container/25 ring-2 ring-primary-container' : 'bg-white/5'}`}>{e}</button>
+                <button key={e} onClick={() => setEmoji(e)} aria-pressed={emoji === e} className={`h-11 w-11 rounded-xl text-xl ${emoji === e ? 'bg-primary-container/25 ring-2 ring-primary-container' : 'bg-ink/5'}`}>{e}</button>
               ))}
             </div>
           </div>
