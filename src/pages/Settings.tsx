@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useClerk, useUser } from '@clerk/react';
 import { Header, Icon } from '../components/ui';
 import { exportCsv } from '../lib/csv';
 import { useStore } from '../store';
@@ -11,6 +12,8 @@ const THEMES: { id: Theme; label: string; icon: string }[] = [
 
 export default function Settings() {
   const { state, saveSettings, reset, toast } = useStore();
+  const { user } = useUser();
+  const { signOut } = useClerk();
   const [f, setF] = useState({
     name: state.settings.name,
     kcal: String(state.settings.kcal),
@@ -93,6 +96,20 @@ export default function Settings() {
           <p className="text-sm text-zinc-500">Todo se guarda solo en este dispositivo ({state.entries.length} registros).</p>
           <button onClick={() => exportCsv(state.entries)} disabled={!state.entries.length} className="btn-ghost w-full py-3"><Icon name="download" /> Exportar CSV</button>
           <button onClick={wipe} className="btn-ghost w-full py-3 !text-error"><Icon name="delete_forever" /> Borrar todos los datos</button>
+        </section>
+
+        <section className="card space-y-3 p-4">
+          <h2 className="font-display text-lg font-semibold">Cuenta</h2>
+          {user && (
+            <div className="flex items-center gap-3">
+              <img src={user.imageUrl} alt="" className="h-10 w-10 rounded-full bg-inner object-cover" />
+              <div className="min-w-0">
+                <p className="truncate font-medium">{user.username || user.fullName || 'Tu cuenta'}</p>
+                <p className="truncate text-sm text-zinc-500">{user.primaryEmailAddress?.emailAddress}</p>
+              </div>
+            </div>
+          )}
+          <button onClick={() => signOut({ redirectUrl: '/login' })} className="btn-ghost w-full py-3"><Icon name="logout" /> Cerrar sesión</button>
         </section>
       </main>
     </>
