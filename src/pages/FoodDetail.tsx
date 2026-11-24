@@ -1,10 +1,12 @@
 import { useState } from 'react';
 import { Navigate, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { Bar, Header, Icon, Stepper } from '../components/ui';
+import { FoodImageSheet } from '../components/FoodImage';
+import { NutriBadge, useFoodImage } from '../components/useFoodImage';
 import { nowTime, todayKey } from '../lib/dates';
 import { clamp, energySplit, g1, macrosFor, pct } from '../lib/nutrition';
 import { useStore } from '../store';
-import { MEALS, type MealId } from '../types';
+import { MEALS, type Food, type MealId } from '../types';
 
 export default function FoodDetail() {
   const { id } = useParams();
@@ -28,7 +30,6 @@ export default function FoodDetail() {
     if (grams <= 0) return;
     logFood(food, grams, meal, date, nowTime());
     toast(`Registrado en ${MEALS.find((x) => x.id === meal)!.label}`);
-    nav(date === todayKey() ? '/' : `/?d=${date}`);
   };
 
   const remove = () => {
@@ -42,15 +43,29 @@ export default function FoodDetail() {
     <>
       <Header back subtitle="Detalle de alimento" />
       <main className="space-y-4 px-4 pb-32 pt-4">
+        <FoodImageSheet food={food} />
+
         <section className="card p-4">
-          <div className="relative mb-4 flex h-44 items-center justify-center rounded-xl bg-gradient-to-br from-primary-container/20 via-surface-container-high to-surface-container-low text-8xl">
-            {food.emoji}
+          <div className="relative mb-4 flex h-44 items-center justify-center overflow-hidden rounded-xl bg-white">
+            {food.image ? (
+              <FoodImageMain food={food} />
+            ) : (
+              <span className="text-8xl">{food.emoji}</span>
+            )}
             <button onClick={() => toggleFav(food.id)} aria-label={fav ? 'Quitar de favoritos' : 'Añadir a favoritos'} aria-pressed={fav}
               className="absolute right-3 top-3 flex h-10 w-10 items-center justify-center rounded-full bg-black/50">
               <Icon name="favorite" fill={fav} className={fav ? 'text-primary-container' : ''} />
             </button>
           </div>
+          {(food.store || food.package || food.nutriScore) && (
+            <div className="mb-3 flex flex-wrap items-center gap-2 text-xs text-zinc-400">
+              {food.store && <span className="rounded-full border border-ink/10 px-2 py-0.5">{food.store}</span>}
+              {food.package && <span className="rounded-full border border-ink/10 px-2 py-0.5">{food.package}</span>}
+              {food.nutriScore && <NutriBadge score={food.nutriScore} />}
+            </div>
+          )}
           <p className="label !text-primary-container">{food.custom ? 'Creado por ti' : 'Base de datos Xeat'} · {food.category}</p>
+
           <h2 className="mb-4 mt-1 font-display text-2xl font-bold leading-tight">{food.name}</h2>
           <div className="inner flex items-center justify-between p-3">
             <div>
@@ -77,20 +92,20 @@ export default function FoodDetail() {
           </div>
           <div className="mt-4 flex h-2 overflow-hidden rounded-full bg-ink/10">
             <div className="bg-protein" style={{ width: `${split.protein}%` }} />
-            <div className="bg-carbs" style={{ width: `${split.fat}%` }} />
-            <div className="bg-fat" style={{ width: `${split.carbs}%` }} />
+            <div className="bg-carbs" style={{ width: `${split.carbs}%` }} />
+            <div className="bg-fat" style={{ width: `${split.fat}%` }} />
           </div>
           <div className="mt-2 flex justify-between text-xs text-zinc-400">
             <span className="flex items-center gap-1"><i className="h-2 w-2 rounded-full bg-protein" />Proteínas {split.protein}%</span>
-            <span className="flex items-center gap-1"><i className="h-2 w-2 rounded-full bg-carbs" />Grasas {split.fat}%</span>
-            <span className="flex items-center gap-1"><i className="h-2 w-2 rounded-full bg-fat" />Carbos {split.carbs}%</span>
+            <span className="flex items-center gap-1"><i className="h-2 w-2 rounded-full bg-carbs" />Carbos {split.carbs}%</span>
+            <span className="flex items-center gap-1"><i className="h-2 w-2 rounded-full bg-fat" />Grasas {split.fat}%</span>
           </div>
         </section>
 
         <div className="grid grid-cols-2 gap-3">
           <Tile label="Proteína" v={m.protein} color="text-protein" note={`${clamp(pct(m.protein, goals.protein), 0, 999)}% de tu objetivo`} />
-          <Tile label="Grasas totales" v={m.fat} color="text-carbs" note={`${clamp(pct(m.fat, goals.fat), 0, 999)}% de tu objetivo`} />
-          <Tile label="Carbohidratos" v={m.carbs} color="text-fat" note={m.carbs < 5 ? 'Bajo en carbohidratos' : `${pct(m.carbs, goals.carbs)}% de tu objetivo`} />
+          <Tile label="Grasas totales" v={m.fat} color="text-fat" note={`${clamp(pct(m.fat, goals.fat), 0, 999)}% de tu objetivo`} />
+          <Tile label="Carbohidratos" v={m.carbs} color="text-carbs" note={m.carbs < 5 ? 'Bajo en carbohidratos' : `${pct(m.carbs, goals.carbs)}% de tu objetivo`} />
           <Tile label="Fibra dietética" v={m.fiber} color="text-fiber" note={m.fiber >= 3 ? 'Buena fuente de fibra' : 'Aporte bajo de fibra'} />
         </div>
 
@@ -149,8 +164,13 @@ export default function FoodDetail() {
   );
 }
 
-function Tile({ label, v, color, note }: { label: string; v: number; color: string; note: string }) {
-  return (
+function FoodImageMain({ food }: { food: Food }) {
+  const src = useFoodImage(food);
+  if (!src) return <span className="text-8xl">{food.emoji}</span>;
+  return <img src={src} alt={`Envase de ${food.name}`} className="h-full w-full object-contain p-2" />;
+}
+
+function Tile({ label, v, color, note }: { label: string; v: number; color: string; note: string }) {  return (
     <div className="card p-4">
       <p className={`label ${color}`}>{label}</p>
       <p className="mt-2 font-display text-3xl font-bold">{g1(v)}<span className="text-sm font-normal text-zinc-500">g</span></p>

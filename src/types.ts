@@ -14,6 +14,14 @@ export interface Food {
   fiber: number;
   micros?: Micro[];
   custom?: boolean;
+  /** Foto del producto en public/products/<slug>.<ext> (sin extensión). Solo productos de marca. */
+  image?: string;
+  /** Cadena o tienda donde se vende habitualmente. */
+  store?: string;
+  /** Tamaño de envase tal como se vende, ej. "500 g". */
+  package?: string;
+  /** A, B, C, D o E. */
+  nutriScore?: 'A' | 'B' | 'C' | 'D' | 'E';
 }
 
 export interface Macros { kcal: number; protein: number; fat: number; carbs: number; fiber: number }

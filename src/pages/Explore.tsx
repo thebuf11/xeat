@@ -1,24 +1,31 @@
 import { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Empty, FoodThumb, Header, Icon } from '../components/ui';
+import { Empty, Header, Icon } from '../components/ui';
+import { FoodImageThumb } from '../components/FoodImage';
 import { CATEGORIES } from '../data/foods';
 import { g1 } from '../lib/nutrition';
 import { useStore } from '../store';
+
+/** Cadenas presentes en el catálogo, en el orden que se muestran como filtro. */
+const CHAIN_ORDER = ['Mercadona', 'Lidl', 'ALDI', 'Consum', 'Alcampo', 'Varios supermercados'];
+const CHAINS = ['Todas', ...CHAIN_ORDER];
 
 export default function Explore() {
   const { foods, state } = useStore();
   const [query, setQuery] = useState('');
   const [cat, setCat] = useState('Todos');
+  const [chain, setChain] = useState('Todas');
   const [onlyFav, setOnlyFav] = useState(false);
 
   const list = useMemo(() => {
     const q = query.trim().toLowerCase();
     return foods.filter((f) =>
       (cat === 'Todos' || (cat === 'Mis alimentos' ? f.custom : f.category === cat)) &&
+      (chain === 'Todas' || (f.store ?? '').startsWith(chain)) &&
       (!onlyFav || state.favorites.includes(f.id)) &&
       (!q || f.name.toLowerCase().includes(q)),
     );
-  }, [foods, query, cat, onlyFav, state.favorites]);
+  }, [foods, query, cat, chain, onlyFav, state.favorites]);
 
   return (
     <>
@@ -35,11 +42,21 @@ export default function Explore() {
           </button>
         </div>
 
-        <div className="-mx-4 flex gap-2 overflow-x-auto px-4">
+        <div className="-mx-4 flex gap-2 overflow-x-auto px-4" role="group" aria-label="Filtrar por tipo">
           {CATEGORIES.map((c) => (
             <button key={c} onClick={() => setCat(c)} className={`chip ${cat === c ? 'chip-active' : ''}`}>{c}</button>
           ))}
         </div>
+
+        {CHAINS.length > 1 && (
+          <div className="-mx-4 flex gap-2 overflow-x-auto px-4" role="group" aria-label="Filtrar por cadena">
+            {CHAINS.map((c) => (
+              <button key={c} onClick={() => setChain(c)} className={`chip ${chain === c ? 'chip-active' : ''}`}>
+                {c === 'Todas' ? 'Todas las tiendas' : c}
+              </button>
+            ))}
+          </div>
+        )}
 
         <Link to="/crear" className="card flex items-center gap-3 border-dashed p-4 text-primary-container">
           <Icon name="add_circle" /> <span className="font-semibold">Crear alimento o plato propio</span>
@@ -49,7 +66,7 @@ export default function Explore() {
           {list.map((f) => (
             <li key={f.id}>
               <Link to={`/alimento/${f.id}`} className="card flex items-center gap-3 p-3 transition hover:bg-inner">
-                <FoodThumb emoji={f.emoji} />
+                <FoodImageThumb food={f} />
                 <div className="min-w-0 flex-1">
                   <p className="flex items-center gap-1.5 truncate font-semibold">
                     {f.name}{state.favorites.includes(f.id) && <Icon name="favorite" fill className="!text-[14px] text-primary-container" />}

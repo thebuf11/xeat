@@ -174,7 +174,7 @@ export default function History() {
                                 <span>{e.emoji}</span>
                                 <span className="min-w-0 flex-1 truncate">{e.name}</span>
                                 <span className="text-xs text-zinc-500">{e.grams}g</span>
-                                <span className="w-16 text-right text-xs text-fat">{g1(e.protein)}g prot</span>
+                                <span className="w-16 text-right text-xs text-protein">{g1(e.protein)}g prot</span>
                               </li>
                             ))}
                           </ul>

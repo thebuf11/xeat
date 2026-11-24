@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
-import { FoodThumb, Header, Icon, Stepper } from '../components/ui';
+import { FoodImageSheet, FoodImageThumb } from '../components/FoodImage';
+import { Header, Icon, Stepper } from '../components/ui';
 import { nowTime, todayKey } from '../lib/dates';
 import { clamp, g1, macrosFor } from '../lib/nutrition';
 import { useFrequentFoods, useStore } from '../store';
@@ -11,6 +12,8 @@ const guessMeal = (): MealId => {
   return h < 11 ? 'desayuno' : h < 16 ? 'almuerzo' : h < 20 ? 'merienda' : 'cena';
 };
 
+interface Pending { food: Food; grams: number }
+
 export default function AddFood() {
   const { foods, logFood, toast } = useStore();
   const nav = useNavigate();
@@ -20,6 +23,7 @@ export default function AddFood() {
   const [query, setQuery] = useState('');
   const [selected, setSelected] = useState<Food | null>(null);
   const [grams, setGrams] = useState(100);
+  const [pending, setPending] = useState<Pending[]>([]);
   const frequent = useFrequentFoods(8);
 
   const results = useMemo(() => {
@@ -33,10 +37,29 @@ export default function AddFood() {
   const split = m ? { p: m.protein * 4, c: m.carbs * 4, f: m.fat * 9 } : null;
   const splitTotal = split ? split.p + split.c + split.f || 1 : 1;
 
-  const add = () => {
+  const pendingTotals = useMemo(() => {
+    const t = { kcal: 0, protein: 0, fat: 0, carbs: 0, fiber: 0 };
+    for (const p of pending) {
+      const x = macrosFor(p.food, p.grams);
+      t.kcal += x.kcal; t.protein += x.protein; t.fat += x.fat; t.carbs += x.carbs; t.fiber += x.fiber;
+    }
+    return t;
+  }, [pending]);
+
+  const queue = () => {
     if (!selected || grams <= 0) return;
-    logFood(selected, grams, meal, date, nowTime());
-    toast(`${selected.name} añadido a ${mealLabel}`);
+    setPending((list) => [...list, { food: selected, grams }]);
+    setSelected(null);
+    setGrams(100);
+    setQuery('');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const confirmAll = () => {
+    if (!pending.length) return;
+    const time = nowTime();
+    pending.forEach((p) => logFood(p.food, p.grams, meal, date, time));
+    toast(`${pending.length === 1 ? pending[0].food.name : `${pending.length} alimentos`} añadido${pending.length === 1 ? '' : 's'} a ${mealLabel}`);
     nav(date === todayKey() ? '/' : `/?d=${date}`);
   };
 
@@ -61,10 +84,41 @@ export default function AddFood() {
           <Quick icon="add_circle" label="Crear plato" onClick={() => nav('/crear')} />
         </div>
 
+        {pending.length > 0 && (
+          <section className="card space-y-3 p-4">
+            <div className="flex items-center justify-between">
+              <h2 className="flex items-center gap-2 font-display text-lg font-semibold">
+                <Icon name="playlist_add_check" className="text-primary-container" />
+                {mealLabel} ({pending.length})
+              </h2>
+              <button onClick={() => setPending([])} className="text-xs font-medium text-zinc-500 hover:text-error">Vaciar</button>
+            </div>
+            <ul className="space-y-2">
+              {pending.map((p, i) => {
+                const pm = macrosFor(p.food, p.grams);
+                return (
+                  <li key={`${p.food.id}-${i}`} className="inner flex items-center gap-3 p-3">
+                    <FoodImageThumb food={p.food} size="h-10 w-10 !text-xl" />
+                    <div className="min-w-0 flex-1">
+                      <p className="truncate text-sm font-semibold">{p.food.name}</p>
+                      <p className="text-xs text-zinc-500">{p.grams} g · {pm.kcal} kcal · {g1(pm.protein)}g prot</p>
+                    </div>
+                    <button onClick={() => setPending((list) => list.filter((_, j) => j !== i))} aria-label={`Quitar ${p.food.name}`} className="p-1 text-zinc-500 hover:text-error"><Icon name="close" /></button>
+                  </li>
+                );
+              })}
+            </ul>
+            <div className="flex items-center justify-between border-t border-ink/5 pt-3 text-sm">
+              <span className="text-zinc-500">Total {mealLabel}</span>
+              <span className="font-display font-bold">{pendingTotals.kcal} kcal · {g1(pendingTotals.protein)}g prot · {g1(pendingTotals.carbs)}g carbs · {g1(pendingTotals.fat)}g grasas</span>
+            </div>
+          </section>
+        )}
+
         {selected && m && split && (
           <section className="card space-y-4 p-4">
             <div className="flex items-center gap-4">
-              <FoodThumb emoji={selected.emoji} size="h-20 w-20 !text-4xl" />
+              <FoodImageThumb food={selected} size="h-20 w-20 !text-4xl" />
               <div className="min-w-0 flex-1">
                 <div className="flex items-center gap-2 text-xs">
                   <span className="rounded-full border border-primary-container/40 bg-primary-container/15 px-2 py-0.5 font-semibold text-primary-container">Seleccionado</span>
@@ -107,6 +161,8 @@ export default function AddFood() {
           </section>
         )}
 
+        {selected && <FoodImageSheet food={selected} />}
+
         <section>
           <div className="mb-3 flex items-center justify-between">
             <h2 className="flex items-center gap-2 font-display text-lg font-semibold">
@@ -120,7 +176,7 @@ export default function AddFood() {
               <li key={f.id}>
                 <button onClick={() => { setSelected(f); setGrams(100); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
                   className={`card flex w-full items-center gap-3 p-3 text-left transition hover:bg-inner ${selected?.id === f.id ? '!border-primary-container/60' : ''}`}>
-                  <FoodThumb emoji={f.emoji} />
+                <FoodImageThumb food={f} />
                   <div className="min-w-0 flex-1">
                     <p className="truncate font-semibold">{f.name}</p>
                     <p className="mb-1 text-xs text-zinc-500">100 g</p>
@@ -147,10 +203,18 @@ export default function AddFood() {
         </section>
       </main>
 
-      <div className="pb-safe fixed inset-x-0 bottom-0 z-40 mx-auto max-w-md border-t border-ink/5 bg-background/95 px-4 pb-3 pt-3 backdrop-blur-xl">
-        <button onClick={add} disabled={!selected || grams <= 0} className="btn-primary w-full py-4 text-base">
-          <Icon name="check_circle" />
-          {selected && m ? `Añadir al ${mealLabel} (${grams}g · ${m.kcal} kcal)` : 'Selecciona un alimento'}
+      <div className="pb-safe fixed inset-x-0 bottom-0 z-40 mx-auto flex max-w-md items-center gap-2 border-t border-ink/5 bg-background/95 px-4 pb-3 pt-3 backdrop-blur-xl">
+        <button
+          onClick={selected ? queue : confirmAll}
+          disabled={selected ? grams <= 0 : !pending.length}
+          className="btn-primary flex-1 py-4 text-base"
+        >
+          <Icon name={selected ? 'add_circle' : 'check_circle'} />
+          {selected && m
+            ? `Añadir al ${mealLabel} (${grams}g · ${m.kcal} kcal)`
+            : pending.length
+              ? `Confirmar ${mealLabel} (${pending.length} · ${pendingTotals.kcal} kcal)`
+              : 'Selecciona un alimento'}
         </button>
       </div>
     </>
